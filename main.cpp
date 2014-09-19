@@ -1,57 +1,70 @@
 #include <iostream>
+#include <stdio.h>
 #include "RgbBitmap.h"
 #include "PvrTcEncoder.h"
 #include "PvrTcDecoder.h"
 
 using namespace Javelin;
 
-void writeTga(FILE *fp, ColorRgb<unsigned char> *rgb, int width, int height) {
-  unsigned char *header = new unsigned char[18];
+RgbBitmap *readTga(const char *filename) {
+  FILE *fp = fopen(filename, "rb");
+
+  fseek(fp, 0, SEEK_END);
+  int fsize = ftell(fp);
+  fseek(fp, 0, SEEK_SET);
+
+  unsigned char header[18];
+  fread(header, 18, 1, fp);
+
+  int w = header[12] | (header[13] << 8);
+  int h = header[14] | (header[15] << 8);
+
+  RgbBitmap *bitmap = new RgbBitmap(w, h);
+  fread((void *)bitmap->data, w * h * 3, 1, fp);
+
+  fclose(fp);
+
+  return bitmap;
+}
+
+void writeTga(const char *filename, RgbBitmap *bitmap) {
+  FILE *fp = fopen(filename, "wb");
+
+  unsigned char header[18];
   memset(header, 0, 18);
   header[2] = 2;
-  header[12] = width & 0xff;
-  header[13] = (width >> 8) & 0xff;
-  header[14] = height & 0xff;
-  header[15] = (height >> 8) & 0xff;
+  header[12] = bitmap->width & 0xff;
+  header[13] = (bitmap->width >> 8) & 0xff;
+  header[14] = bitmap->height & 0xff;
+  header[15] = (bitmap->height >> 8) & 0xff;
   header[16] = 24;
 
   fwrite(header, 18, 1, fp);
 
-  fwrite(rgb, width * height * 3, 1, fp);
+  fwrite(bitmap->data, bitmap->width * bitmap->height * 3, 1, fp);
 
-  delete[] header;
+  fclose(fp);
 }
 
 int main(int argc, char **argv) {
-  const int w = 64;
-  const int h = 64;
-  const int area = w * h;
+  RgbBitmap *rgbBitmap = readTga("globe.tga");
 
-  RgbBitmap rgbBitmap(w, h);
-  ColorRgb<unsigned char> *rgb = rgbBitmap.GetData();
-
-  // Generate some texture
-  for (int y = 0, pi = 0; y < h; ++y) {
-    for (int x = 0; x < w; ++x, ++pi) {
-      rgb[pi] = ColorRgb<unsigned char>(x % 255, y % 255, (x * y) % 255);
-    }
-  }
+  const int area = rgbBitmap->GetArea();
+  ColorRgb<unsigned char> *rgb = rgbBitmap->GetData();
 
   // Write the texture prior to compression
-  FILE *fp = fopen("rgb_before.tga", "wb");
-  writeTga(fp, rgb, w, h);
-  fclose(fp);
+  writeTga("rgb_before.tga", rgbBitmap);
 
   unsigned char *pvrtc = new unsigned char[area];
 
   memset(pvrtc, 0, area);
-  PvrTcEncoder::EncodeRgb4Bpp(pvrtc, rgbBitmap);
-  PvrTcDecoder::DecodeRgb4Bpp(rgb, Point2<int>(w, h), pvrtc);
+  PvrTcEncoder::EncodeRgb4Bpp(pvrtc, *rgbBitmap);
+  PvrTcDecoder::DecodeRgb4Bpp(rgb, Point2<int>(rgbBitmap->width, rgbBitmap->height), pvrtc);
 
   // Write the texture post compression
-  fp = fopen("rgb_after.tga", "wb");
-  writeTga(fp, rgb, w, h);
-  fclose(fp);
+  writeTga("rgb_after.tga", rgbBitmap);
+
+  delete rgbBitmap;
 
   return 0;
 }
