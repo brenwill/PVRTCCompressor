@@ -1,7 +1,7 @@
 //============================================================================
 
-#include "Javelin/Image/PvrTcPacket.h"
-#include "Javelin/Data/BitScale.h"
+#include "PvrTcPacket.h"
+#include "BitScale.h"
 
 //============================================================================
 

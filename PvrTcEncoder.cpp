@@ -1,14 +1,15 @@
 //============================================================================
 
-#include "Javelin/Image/PvrTcEncoder.h"
-#include "Javelin/Image/AlphaBitmap.h"
-#include "Javelin/Image/PvrTcPacket.h"
-#include "Javelin/Image/RgbBitmap.h"
-#include "Javelin/Image/RgbaBitmap.h"
-#include "Javelin/Data/MortonTable.h"
-#include "Javelin/Math/BitUtility.h"
-#include "Javelin/System/Assert.h"
-#include "Javelin/Types/Interval.h"
+#include "PvrTcEncoder.h"
+#include "AlphaBitmap.h"
+#include "PvrTcPacket.h"
+#include "RgbBitmap.h"
+#include "RgbaBitmap.h"
+#include "MortonTable.h"
+#include "BitUtility.h"
+#include "Interval.h"
+#include <assert.h>
+#include <math.h>
 
 //============================================================================
 
@@ -24,7 +25,7 @@ static const unsigned char MODULATION_LUT[16] =
 
 //============================================================================
 
-JINLINE unsigned PvrTcEncoder::GetMortonNumber(int x, int y)
+inline unsigned PvrTcEncoder::GetMortonNumber(int x, int y)
 {
 	return MORTON_TABLE[x >> 8] << 17 | MORTON_TABLE[y >> 8] << 16 | MORTON_TABLE[x & 0xFF] << 1 | MORTON_TABLE[y & 0xFF];
 }
@@ -34,8 +35,8 @@ JINLINE unsigned PvrTcEncoder::GetMortonNumber(int x, int y)
 void PvrTcEncoder::EncodeAlpha2Bpp(void* result, const AlphaBitmap& bitmap)
 {
 	int size = bitmap.GetBitmapWidth();
-	JASSERT(size == bitmap.GetBitmapHeight());
-	JASSERT(BitUtility::IsPowerOf2(size));
+	assert(size == bitmap.GetBitmapHeight());
+	assert(BitUtility::IsPowerOf2(size));
 	
 	// Blocks in each dimension.
 	int xBlocks = size/8;
@@ -76,8 +77,8 @@ void PvrTcEncoder::EncodeAlpha2Bpp(void* result, const AlphaBitmap& bitmap)
 void PvrTcEncoder::EncodeAlpha4Bpp(void* result, const AlphaBitmap& bitmap)
 {
 	int size = bitmap.GetBitmapWidth();
-	JASSERT(size == bitmap.GetBitmapHeight());
-	JASSERT(BitUtility::IsPowerOf2(size));
+	assert(size == bitmap.GetBitmapHeight());
+	assert(BitUtility::IsPowerOf2(size));
 	
 	// Blocks in each dimension.
 	int blocks = size/4;
@@ -118,12 +119,6 @@ void PvrTcEncoder::EncodeAlpha4Bpp(void* result, const AlphaBitmap& bitmap)
 
 typedef Interval<ColorRgb<unsigned char>> ColorRgbBoundingBox;
 
-// To optimize interval operations
-template<> JINLINE bool Interval<ColorRgb<unsigned char>>::IsEmpty() const
-{
-	return false;
-}
-
 static void CalculateBoundingBox(ColorRgbBoundingBox& cbb, const RgbBitmap& bitmap, int blockX, int blockY)
 {
 	int size = bitmap.GetBitmapWidth();
@@ -153,8 +148,8 @@ static void CalculateBoundingBox(ColorRgbBoundingBox& cbb, const RgbBitmap& bitm
 
 void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbBitmap& bitmap)
 {
-	JASSERT(bitmap.GetBitmapWidth() == bitmap.GetBitmapHeight());
-	JASSERT(BitUtility::IsPowerOf2(bitmap.GetBitmapWidth()));
+	assert(bitmap.GetBitmapWidth() == bitmap.GetBitmapHeight());
+	assert(BitUtility::IsPowerOf2(bitmap.GetBitmapWidth()));
 	const int size = bitmap.GetBitmapWidth();
 	const int blocks = size / 4;
 	const int blockMask = blocks-1;
@@ -218,7 +213,7 @@ void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbBitmap& bitmap)
 						ColorRgb<int> v = p - ca;
 						
 						int projection = v % d;
-						int length = Math::Sqrt(d % d);
+						int length = static_cast<int>(sqrtf(d % d));
 						
 						int weight = 16 * projection / length;
 						if(weight < 0) weight = 0;
@@ -269,8 +264,8 @@ static void CalculateBoundingBox(ColorRgbBoundingBox& cbb, const RgbaBitmap& bit
 
 void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbaBitmap& bitmap)
 {
-	JASSERT(bitmap.GetBitmapWidth() == bitmap.GetBitmapHeight());
-	JASSERT(BitUtility::IsPowerOf2(bitmap.GetBitmapWidth()));
+	assert(bitmap.GetBitmapWidth() == bitmap.GetBitmapHeight());
+	assert(BitUtility::IsPowerOf2(bitmap.GetBitmapWidth()));
 	const int size = bitmap.GetBitmapWidth();
 	const int blocks = size / 4;
 	const int blockMask = blocks-1;
@@ -359,7 +354,7 @@ void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbaBitmap& bitmap)
 typedef Interval<ColorRgba<unsigned char>> ColorRgbaBoundingBox;
 
 // To optimize interval operations
-template<> JINLINE bool Interval<ColorRgba<unsigned char>>::IsEmpty() const
+template<> inline bool Interval<ColorRgba<unsigned char>>::IsEmpty() const
 {
 	return false;
 }
@@ -394,8 +389,8 @@ static void CalculateBoundingBox(ColorRgbaBoundingBox& cbb, const RgbaBitmap& bi
 
 void PvrTcEncoder::EncodeRgba4Bpp(void* result, const RgbaBitmap& bitmap)
 {
-	JASSERT(bitmap.GetBitmapWidth() == bitmap.GetBitmapHeight());
-	JASSERT(BitUtility::IsPowerOf2(bitmap.GetBitmapWidth()));
+	assert(bitmap.GetBitmapWidth() == bitmap.GetBitmapHeight());
+	assert(BitUtility::IsPowerOf2(bitmap.GetBitmapWidth()));
 	const int size = bitmap.GetBitmapWidth();
 	const int blocks = size / 4;
 	const int blockMask = blocks-1;

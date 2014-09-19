@@ -1,8 +1,8 @@
 //============================================================================
 
 #pragma once
-#include "Javelin/Math/Point2.h"
-#include "Javelin/Types/ColorRgba.h"
+#include "Point2.h"
+#include "ColorRgba.h"
 
 //============================================================================
 

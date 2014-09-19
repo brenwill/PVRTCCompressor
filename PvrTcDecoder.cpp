@@ -1,10 +1,10 @@
 //============================================================================
 
-#include "Javelin/Image/PvrTcDecoder.h"
-#include "Javelin/Image/PvrTcPacket.h"
+#include "PvrTcDecoder.h"
+#include "PvrTcPacket.h"
 
-#include "Javelin/Data/MortonTable.h"
-#include "Javelin/System/Assert.h"
+#include "MortonTable.h"
+#include <assert.h>
 
 //============================================================================
 
@@ -13,7 +13,7 @@ using Data::MORTON_TABLE;
 
 //============================================================================
 
-JINLINE unsigned PvrTcDecoder::GetMortonNumber(int x, int y)
+inline unsigned PvrTcDecoder::GetMortonNumber(int x, int y)
 {
     return MORTON_TABLE[x >> 8] << 17 | MORTON_TABLE[y >> 8] << 16 | MORTON_TABLE[x & 0xFF] << 1 | MORTON_TABLE[y & 0xFF];
 }
@@ -22,7 +22,7 @@ JINLINE unsigned PvrTcDecoder::GetMortonNumber(int x, int y)
 
 void PvrTcDecoder::DecodeRgb4Bpp(ColorRgb<unsigned char>* result, const Point2<int>& size, const void* data)
 {
-    JASSERT(size.x == size.y);
+    assert(size.x == size.y);
 	
 	const int blocks = size.x / 4;
 	const int blockMask = blocks-1;
@@ -82,7 +82,7 @@ void PvrTcDecoder::DecodeRgb4Bpp(ColorRgb<unsigned char>* result, const Point2<i
 
 void PvrTcDecoder::DecodeRgba4Bpp(ColorRgba<unsigned char>* result, const Point2<int>& size, const void* data)
 {
-    JASSERT(size.x == size.y);
+    assert(size.x == size.y);
     
 	const int blocks = size.x / 4;
 	const int blockMask = blocks-1;
