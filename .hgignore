@@ -1,0 +1,5 @@
+syntax: glob
+gen_bitscales
+pvrtctest
+rgb_after.tga
+rgb_before.tga
