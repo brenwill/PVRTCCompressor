@@ -27,20 +27,20 @@ public:
     , b(x.b) {
   }
 
-  ColorRgb<T> operator *(T x) {
-    return ColorRgb<T>(r * x, g * x, b * x);
+  ColorRgb<int> operator *(int x) {
+    return ColorRgb<int>(r * x, g * x, b * x);
   }
 
-  ColorRgb<T> operator +(const ColorRgb<T> &x) {
-    return ColorRgb<T>(r + x.r, g + x.g, b + x.b);
+  ColorRgb<int> operator +(const ColorRgb<T> &x) {
+    return ColorRgb<int>(r + (int)x.r, g + (int)x.g, b + (int)x.b);
   }
 
-  ColorRgb<T> operator -(const ColorRgb<T> &x) {
-    return ColorRgb<T>(r - x.r, g - x.g, b - x.b);
+  ColorRgb<int> operator -(const ColorRgb<T> &x) {
+    return ColorRgb<int>(r - (int)x.r, g - (int)x.g, b - (int)x.b);
   }
 
   unsigned int operator %(const ColorRgb<T> &x) {
-    return r * x.r + g * x.g + b * x.b;
+    return r * (int)x.r + g * (int)x.g + b * (int)x.b;
   }
 
   bool operator ==(const ColorRgb<T> &x) {
@@ -71,21 +71,30 @@ public:
     , a(x.a) {
   }
 
-  ColorRgba<T> operator *(T x) {
+  ColorRgba<int> operator *(int x) {
     return ColorRgba<T>(ColorRgb<T>::r * x, 
                         ColorRgb<T>::g * x, ColorRgb<T>::b * x, a * x);
   }
 
-  ColorRgba<T> operator +(const ColorRgba<T> &x) {
-    return ColorRgba<T>(ColorRgb<T>::r + x.r, ColorRgb<T>::g + x.g, ColorRgb<T>::b + x.b, a + x.a);
+  ColorRgba<int> operator +(const ColorRgba<T> &x) {
+    return ColorRgba<T>(ColorRgb<T>::r + (int)x.r, 
+                        ColorRgb<T>::g + (int)x.g, 
+                        ColorRgb<T>::b + (int)x.b, 
+                        a + (int)x.a);
   }
 
-  ColorRgba<T> operator -(const ColorRgba<T> &x) {
-    return ColorRgba<T>(ColorRgb<T>::r - x.r, ColorRgb<T>::g - x.g, ColorRgb<T>::b - x.b, a - x.a);
+  ColorRgba<int> operator -(const ColorRgba<T> &x) {
+    return ColorRgba<T>(ColorRgb<T>::r - (int)x.r, 
+                        ColorRgb<T>::g - (int)x.g, 
+                        ColorRgb<T>::b - (int)x.b, 
+                        a - (int)x.a);
   }
 
   unsigned int operator %(const ColorRgba<T> &x) {
-    return ColorRgb<T>::r * x.r + ColorRgb<T>::g * x.g + ColorRgb<T>::b * x.b + a * x.a;
+    return ColorRgb<T>::r * (int)x.r + 
+           ColorRgb<T>::g * (int)x.g + 
+           ColorRgb<T>::b * (int)x.b + 
+           a * (int)x.a;
   }
 
   bool operator ==(const ColorRgba<T> &x) {
