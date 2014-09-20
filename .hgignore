@@ -3,3 +3,7 @@ gen_bitscales
 pvrtctest
 rgb_after.tga
 rgb_before.tga
+Debug/
+pvrtc.opensdf
+pvrtc.sdf
+pvrtc.v12.suo
