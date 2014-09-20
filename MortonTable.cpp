@@ -3,6 +3,9 @@
 #include "MortonTable.h"
 
 //============================================================================
+#ifdef _WIN32
+#define constexpr const
+#endif
 
 constexpr unsigned short Javelin::Data::MORTON_TABLE[256] =
 {

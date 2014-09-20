@@ -1,5 +1,9 @@
 #include "BitScale.h"
 
+#ifdef _WIN32
+#define constexpr const
+#endif
+
 constexpr uint8_t Javelin::Data::BITSCALE_5_TO_8[32] = {
  0, 8, 16, 24, 32, 41, 49, 57, 65, 74,
  82, 90, 98, 106, 115, 123, 131, 139, 148, 156,
