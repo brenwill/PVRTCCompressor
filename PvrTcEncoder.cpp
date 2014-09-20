@@ -354,12 +354,6 @@ void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbaBitmap& bitmap)
 
 typedef Interval<ColorRgba<unsigned char>> ColorRgbaBoundingBox;
 
-// To optimize interval operations
-template<> inline bool Interval<ColorRgba<unsigned char>>::IsEmpty() const
-{
-	return false;
-}
-
 static void CalculateBoundingBox(ColorRgbaBoundingBox& cbb, const RgbaBitmap& bitmap, int blockX, int blockY)
 {
 	int size = bitmap.GetBitmapWidth();
