@@ -214,7 +214,7 @@ void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbBitmap& bitmap)
 						ColorRgb<int> v = p - ca;
 						
 						int projection = v % d;
-						int length = static_cast<int>(sqrtf(d % d));
+						int length = static_cast<int>(sqrtf((float)(d % d)));
 						
 						int weight = 16 * projection / length;
 						if(weight < 0) weight = 0;

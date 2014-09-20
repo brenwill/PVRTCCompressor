@@ -1,30 +1,14 @@
 #pragma once
 
+#include "Bitmap.h"
+
 namespace Javelin {
 
-class AlphaBitmap {
+class AlphaBitmap : public Bitmap {
 public:
-  int width;
-  int height;
-  unsigned char *data;
-
   AlphaBitmap(int w, int h)
-    : width(w)
-    , height(h)
-    , data(new unsigned char[width * height]) {
+    : Bitmap(w, h, 1) {
   }
-
-  ~AlphaBitmap() {
-    delete[] data;
-  }
-
-  int GetArea() const { return width * height; }
-
-  int GetBitmapWidth() const { return width; }
-
-  int GetBitmapHeight() const { return height; }
-
-  const unsigned char *GetRawData() const { return data; }
 
   const unsigned char *GetData() const { return data; }
 

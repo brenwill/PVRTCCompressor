@@ -77,6 +77,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AlphaBitmap.h" />
+    <ClInclude Include="Bitmap.h" />
     <ClInclude Include="BitScale.h" />
     <ClInclude Include="BitUtility.h" />
     <ClInclude Include="ColorRgba.h" />

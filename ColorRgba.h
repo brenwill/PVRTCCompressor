@@ -31,23 +31,23 @@ public:
     return ColorRgb<int>(r * x, g * x, b * x);
   }
 
-  ColorRgb<int> operator +(const ColorRgb<T> &x) {
+  ColorRgb<int> operator +(const ColorRgb<T> &x) const {
     return ColorRgb<int>(r + (int)x.r, g + (int)x.g, b + (int)x.b);
   }
 
-  ColorRgb<int> operator -(const ColorRgb<T> &x) {
+  ColorRgb<int> operator -(const ColorRgb<T> &x) const {
     return ColorRgb<int>(r - (int)x.r, g - (int)x.g, b - (int)x.b);
   }
 
-  unsigned int operator %(const ColorRgb<T> &x) {
+  int operator %(const ColorRgb<T> &x) const {
     return r * (int)x.r + g * (int)x.g + b * (int)x.b;
   }
 
-  bool operator ==(const ColorRgb<T> &x) {
+  bool operator ==(const ColorRgb<T> &x) const {
     return r == x.r && g == x.g && b == x.b;
   }
 
-  bool operator !=(const ColorRgb<T> &x) {
+  bool operator !=(const ColorRgb<T> &x) const {
     return r != x.r || g != x.g || b != x.b;
   }
 };
@@ -90,7 +90,7 @@ public:
                         a - (int)x.a);
   }
 
-  unsigned int operator %(const ColorRgba<T> &x) {
+  int operator %(const ColorRgba<T> &x) {
     return ColorRgb<T>::r * (int)x.r + 
            ColorRgb<T>::g * (int)x.g + 
            ColorRgb<T>::b * (int)x.b + 
