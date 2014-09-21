@@ -11,7 +11,8 @@
 #include "PvrTcDecoder.h"
 
 /*
- Test program for the PvrTcEncoder.
+ Test program for the PvrTcEncoder, it compresses and then decompresses an
+ image, ensuring the end result is something reasonable.
  */
 
 using namespace Javelin;
