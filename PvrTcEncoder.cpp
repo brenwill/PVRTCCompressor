@@ -206,22 +206,19 @@ void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbBitmap& bitmap)
 									   p2->GetColorRgbB() * (*factor)[2] +
 									   p3->GetColorRgbB() * (*factor)[3];
 					
-					if(ca != cb)
-					{
-						const ColorRgb<unsigned char>& pixel = data[py*size + px];
-						ColorRgb<int> d = cb - ca;
-						ColorRgb<int> p{pixel.r*16, pixel.g*16, pixel.b*16};
-						ColorRgb<int> v = p - ca;
-						
-						int projection = v % d;
-                        if (projection > 0)
-                        {
-                            int lengthSquared = d % d;
-                            int weight = 16 * projection / lengthSquared;
-                            if (weight > 15) weight = 15;
-                            modulationData |= MODULATION_LUT[weight];
-                        }
-					}
+					const ColorRgb<unsigned char>& pixel = data[py*size + px];
+					ColorRgb<int> d = cb - ca;
+					ColorRgb<int> p{pixel.r*16, pixel.g*16, pixel.b*16};
+					ColorRgb<int> v = p - ca;
+					
+					// PVRTC uses weightings of 0, 3/8, 5/8 and 1
+					// The boundaries for these are 3/16, 1/2 (=8/16), 13/16
+					int projection = (v % d) * 16;
+					int lengthSquared = d % d;
+					if(projection > 3*lengthSquared) modulationData++;
+					if(projection > 8*lengthSquared) modulationData++;
+					if(projection > 13*lengthSquared) modulationData++;
+					
 					modulationData = BitUtility::RotateRight(modulationData, 2);
 					
 					factor++;
@@ -323,22 +320,19 @@ void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbaBitmap& bitmap)
 									   p2->GetColorRgbB() * (*factor)[2] +
 									   p3->GetColorRgbB() * (*factor)[3];
 					
-					if(ca != cb)
-					{
-						const ColorRgb<unsigned char>& pixel = data[py*size + px];
-						ColorRgb<int> d = cb - ca;
-						ColorRgb<int> p{pixel.r*16, pixel.g*16, pixel.b*16};
-						ColorRgb<int> v = p - ca;
-						
-						int projection = v % d;
-						if(projection > 0)
-						{
-							int lengthSquared = d % d;
-							int weight = 16 * projection / lengthSquared;
-							if(weight > 15) weight = 15;
-							modulationData |= MODULATION_LUT[weight];
-						}
-					}
+					const ColorRgb<unsigned char>& pixel = data[py*size + px];
+					ColorRgb<int> d = cb - ca;
+					ColorRgb<int> p{pixel.r*16, pixel.g*16, pixel.b*16};
+					ColorRgb<int> v = p - ca;
+					
+					// PVRTC uses weightings of 0, 3/8, 5/8 and 1
+					// The boundaries for these are 3/16, 1/2 (=8/16), 13/16
+					int projection = (v % d) * 16;
+					int lengthSquared = d % d;
+					if(projection > 3*lengthSquared) modulationData++;
+					if(projection > 8*lengthSquared) modulationData++;
+					if(projection > 13*lengthSquared) modulationData++;
+					
 					modulationData = BitUtility::RotateRight(modulationData, 2);
 					
 					factor++;
@@ -442,22 +436,19 @@ void PvrTcEncoder::EncodeRgba4Bpp(void* result, const RgbaBitmap& bitmap)
 										p2->GetColorRgbaB() * (*factor)[2] +
 										p3->GetColorRgbaB() * (*factor)[3];
 					
-					if(ca != cb)
-					{
-						const ColorRgba<unsigned char>& pixel = data[py*size + px];
-						ColorRgba<int> d = cb - ca;
-						ColorRgba<int> p{pixel.r*16, pixel.g*16, pixel.b*16, pixel.a*16};
-						ColorRgba<int> v = p - ca;
-						
-						int projection = v % d;
-						if(projection > 0)
-						{
-							int lengthSquared = d % d;
-							int weight = 16 * projection / lengthSquared;
-							if(weight > 15) weight = 15;
-							modulationData |= MODULATION_LUT[weight];
-						}
-					}
+					const ColorRgb<unsigned char>& pixel = data[py*size + px];
+					ColorRgb<int> d = cb - ca;
+					ColorRgb<int> p{pixel.r*16, pixel.g*16, pixel.b*16};
+					ColorRgb<int> v = p - ca;
+					
+					// PVRTC uses weightings of 0, 3/8, 5/8 and 1
+					// The boundaries for these are 3/16, 1/2 (=8/16), 13/16
+					int projection = (v % d) * 16;
+					int lengthSquared = d % d;
+					if(projection > 3*lengthSquared) modulationData++;
+					if(projection > 8*lengthSquared) modulationData++;
+					if(projection > 13*lengthSquared) modulationData++;
+					
 					modulationData = BitUtility::RotateRight(modulationData, 2);
 					
 					factor++;
