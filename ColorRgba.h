@@ -5,9 +5,10 @@ namespace Javelin {
 template<typename T>
 class ColorRgb {
 public:
-    T r;
-    T g;
     T b;
+    T g;
+    T r;
+    
 
     ColorRgb()
         : r(0)

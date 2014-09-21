@@ -214,12 +214,13 @@ void PvrTcEncoder::EncodeRgb4Bpp(void* result, const RgbBitmap& bitmap)
 						ColorRgb<int> v = p - ca;
 						
 						int projection = v % d;
-						int length = static_cast<int>(sqrtf((float)(d % d)));
-						
-						int weight = 16 * projection / length;
-						if(weight < 0) weight = 0;
-						if(weight > 15) weight = 15;
-						modulationData |= MODULATION_LUT[weight];
+                        if (projection > 0)
+                        {
+                            int lengthSquared = d % d;
+                            int weight = 16 * projection / lengthSquared;
+                            if (weight > 15) weight = 15;
+                            modulationData |= MODULATION_LUT[weight];
+                        }
 					}
 					modulationData = BitUtility::RotateRight(modulationData, 2);
 					

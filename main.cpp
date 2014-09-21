@@ -100,34 +100,17 @@ void writePvr(const char *filename, RgbBitmap *bitmap) {
 int main(int argc, char **argv) {
   RgbBitmap *rgbBitmap = readTga("globe.tga");
 
-  const int area = rgbBitmap->GetArea() / 2;
+  const int size = rgbBitmap->GetArea() / 2;
   ColorRgb<unsigned char> *rgb = rgbBitmap->GetData();
-
-  FILE *fp = fopen("globe.pvrtc", "rb");
-  fseek(fp, 0, SEEK_END);
-  int size = ftell(fp);
-  fseek(fp, 0, SEEK_SET);
-  unsigned char *globe_pvrtc = new unsigned char[size];
-  fread(globe_pvrtc, size, 1, fp);
-  fclose(fp);
 
   // Write the texture prior to compression
   writeTga("globe_before.tga", rgbBitmap);
 
   writePvr("globe_encoded.pvr", rgbBitmap);
 
-  unsigned char *pvrtc = new unsigned char[area];
-
-  memset(pvrtc, 0, area);
+  unsigned char *pvrtc = new unsigned char[size];
+  memset(pvrtc, 0, size);
   PvrTcEncoder::EncodeRgb4Bpp(pvrtc, *rgbBitmap);
-
-  std::cout << area << " : " << size << std::endl;
-  for (int i = 0; i < size; ++i) {
-      if (pvrtc[i] != globe_pvrtc[i]) {
-          std::cout << i << " :" << (int) pvrtc[i] << " != " << (int) globe_pvrtc[i] << std::endl;
-          break;
-      }
-  }
 
   PvrTcDecoder::DecodeRgb4Bpp(rgb, rgbBitmap->GetSize(), pvrtc);
 
