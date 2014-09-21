@@ -436,10 +436,10 @@ void PvrTcEncoder::EncodeRgba4Bpp(void* result, const RgbaBitmap& bitmap)
 										p2->GetColorRgbaB() * (*factor)[2] +
 										p3->GetColorRgbaB() * (*factor)[3];
 					
-					const ColorRgb<unsigned char>& pixel = data[py*size + px];
-					ColorRgb<int> d = cb - ca;
-					ColorRgb<int> p{pixel.r*16, pixel.g*16, pixel.b*16};
-					ColorRgb<int> v = p - ca;
+					const ColorRgba<unsigned char>& pixel = data[py*size + px];
+					ColorRgba<int> d = cb - ca;
+					ColorRgba<int> p{pixel.r*16, pixel.g*16, pixel.b*16, pixel.a*16};
+					ColorRgba<int> v = p - ca;
 					
 					// PVRTC uses weightings of 0, 3/8, 5/8 and 1
 					// The boundaries for these are 3/16, 1/2 (=8/16), 13/16
