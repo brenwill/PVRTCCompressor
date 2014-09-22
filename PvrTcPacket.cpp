@@ -166,7 +166,7 @@ void PvrTcPacket::SetColorB(const ColorRgb<unsigned char>& c)
 
 void PvrTcPacket::SetColorA(const ColorRgba<unsigned char>& c)
 {
-	int a = Data::BITSCALE_8_TO_3_FLOOR[c.r];
+	int a = Data::BITSCALE_8_TO_3_FLOOR[c.a];
 	if(a == 7)
 	{
 		int r = Data::BITSCALE_8_TO_5_FLOOR[c.r];
@@ -187,7 +187,7 @@ void PvrTcPacket::SetColorA(const ColorRgba<unsigned char>& c)
 
 void PvrTcPacket::SetColorB(const ColorRgba<unsigned char>& c)
 {
-	int a = Data::BITSCALE_8_TO_3_CEIL[c.r];
+	int a = Data::BITSCALE_8_TO_3_CEIL[c.a];
 	if(a == 7)
 	{
 		int r = Data::BITSCALE_8_TO_5_CEIL[c.r];
