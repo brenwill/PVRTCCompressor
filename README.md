@@ -1,6 +1,13 @@
 PvrTcCompressor
 ===============
 
+This is a **trans-source-control-tool** fork of Jeffrey Lim's original [Bitbucket repo](https://bitbucket.org/jthlim/pvrtccompressor).
+
+The original README content is as follows:
+
+---------
+
+
 This was an afternoon project to determine whether crude approximations could
 produce reasonable results.
 
